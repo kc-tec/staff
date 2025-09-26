@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts link for Kantumruy Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kantumruy Pro', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 min-h-screen flex flex-col items-center">
+    
+    <!-- Main container -->
+    <div class="max-w-4xl w-full bg-white p-6 md:p-10 rounded-xl shadow-lg mt-8">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">School Student Information</h1>
+            <p class="mt-2 text-gray-500">A simple, single-page application for student data.</p>
+        </header>
+
+        <!-- Main content area -->
+        <main id="content" class="space-y-6">
+            <!-- This area will be populated by JavaScript -->
+            <div class="text-center p-8 text-gray-500">
+                <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-4">Loading student data...</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // REPLACED WITH YOUR GOOGLE APPS SCRIPT URL
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1TTVBudpOSoOrjfALJxJwqUYYP9Bd9CChfY2aILWiWq3Ryv_R4UfcgBlbER8Dj9TUNQ/exec';
+        
+        const contentDiv = document.getElementById('content');
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('id');
+        
+        let students = [];
+
+        // Function to display an individual student's details
+        function showStudentDetails(id) {
+            const student = students.find(s => s.id.toString() === id);
+
+            if (!student) {
+                // Handle case where student is not found
+                contentDiv.innerHTML = `
+                    <div class="text-center p-8 bg-red-100 rounded-lg">
+                        <h2 class="text-2xl font-semibold text-red-600">Student Not Found</h2>
+                        <p class="mt-2 text-red-500">The student ID "${id}" does not exist.</p>
+                        <a href="index.html" class="mt-4 inline-block px-6 py-2 bg-red-500 text-white font-medium rounded-full hover:bg-red-600 transition-colors">Go Back Home</a>
+                    </div>
+                `;
+                return;
+            }
+
+            contentDiv.innerHTML = `
+                <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8 p-6 bg-gray-50 rounded-lg shadow-inner">
+                    <img src="${student.imageUrl}" alt="Image of ${student.name}" class="rounded-full w-24 h-24 md:w-32 md:h-32 object-cover border-4 border-white shadow-md">
+                    <div class="text-center md:text-left">
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">${student.name}</h2>
+                        <p class="text-lg text-gray-600 mt-1">${student.major} Major | ${student.grade}</p>
+                        <div class="mt-4 text-gray-700 space-y-2">
+                            <p><span class="font-semibold">Student ID:</span> ${student.id}</p>
+                            <p><span class="font-semibold">Email:</span> <a href="mailto:${student.email}" class="text-blue-500 hover:underline">${student.email}</a></p>
+                            <p><span class="font-semibold">Phone:</span> ${student.phone}</p>
+                            <p><span class="font-semibold">Address:</span> ${student.address}</p>
+                        </div>
+                        <a href="index.html" class="mt-6 inline-block px-6 py-2 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition-colors">Go Back to Student List</a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Renders the list of students passed to it
+        function renderStudentList(studentsToDisplay) {
+            const studentListContainer = document.getElementById('student-list');
+            if (studentsToDisplay.length === 0) {
+                studentListContainer.innerHTML = '<p class="text-center text-gray-500 mt-4">No students found.</p>';
+            } else {
+                studentListContainer.innerHTML = `
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        ${studentsToDisplay.map(s => `
+                            <li class="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                                <a href="?id=${s.id}" class="block">
+                                    <h3 class="font-semibold text-lg text-blue-600 hover:underline">${s.name}</h3>
+                                    <p class="text-gray-500">${s.grade} | ${s.major}</p>
+                                </a>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+            }
+        }
+
+        // Function to display the search bar and the list of all students
+        function showStudentList() {
+            contentDiv.innerHTML = `
+                <div class="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0">
+                    <h2 class="text-2xl font-bold text-gray-700">All Students (${students.length})</h2>
+                    <input id="searchInput" type="text" placeholder="Search by name or ID..." class="w-full md:w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div id="student-list" class="space-y-6">
+                    <!-- Student list will be rendered here -->
+                </div>
+            `;
+            
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                const filteredStudents = students.filter(s => 
+                    s.name.toLowerCase().includes(searchTerm) || 
+                    s.id.toString().includes(searchTerm)
+                );
+                renderStudentList(filteredStudents);
+            });
+            
+            renderStudentList(students);
+        }
+
+        // --- Fetch and Display Data ---
+        async function fetchStudents() {
+            try {
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                students = await response.json();
+                
+                // Once data is loaded, check URL to determine view
+                if (studentId) {
+                    showStudentDetails(studentId);
+                } else {
+                    showStudentList();
+                }
+
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+                contentDiv.innerHTML = `
+                    <div class="text-center p-8 bg-red-100 rounded-lg">
+                        <h2 class="text-2xl font-semibold text-red-600">Failed to Load Data</h2>
+                        <p class="mt-2 text-red-500">Could not fetch data from the Google Sheet. Please check the Apps Script URL and deployment status.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Start the process
+        if (GOOGLE_APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+            contentDiv.innerHTML = `
+                <div class="text-center p-8 bg-yellow-100 rounded-lg">
+                    <h2 class="text-2xl font-semibold text-yellow-600">Configuration Required</h2>
+                    <p class="mt-2 text-yellow-500">Please replace the placeholder URL in the JavaScript code with your deployed Apps Script URL.</p>
+                </div>
+            `;
+        } else {
+            fetchStudents();
+        }
+    </script>
+</body>
+</html>
