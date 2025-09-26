@@ -30,8 +30,8 @@
     <!-- Main container -->
     <div class="max-w-4xl w-full bg-white p-6 md:p-10 rounded-xl shadow-lg mt-8">
         <header class="mb-8 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">School Student Information</h1>
-            <p class="mt-2 text-gray-500">A simple, single-page application for student data.</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">សាលាគរុកោសល្យ និងវិក្រឹតការខេត្តកំពង់ចាម</h1>
+            <p class="mt-2 text-gray-500">Kampong Cham Provincial Teacher Training Center</p>
         </header>
 
         <!-- Main content area -->
@@ -42,7 +42,7 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <p class="mt-4">Loading student data...</p>
+                <p class="mt-4">Loading data...</p>
             </div>
         </main>
     </div>
@@ -65,8 +65,8 @@
                 // Handle case where student is not found
                 contentDiv.innerHTML = `
                     <div class="text-center p-8 bg-red-100 rounded-lg">
-                        <h2 class="text-2xl font-semibold text-red-600">Student Not Found</h2>
-                        <p class="mt-2 text-red-500">The student ID "${id}" does not exist.</p>
+                        <h2 class="text-2xl font-semibold text-red-600">មិនមាន​ទិន្នន័យ</h2>
+                        <p class="mt-2 text-red-500">The staff ID "${id}" does not exist.</p>
                         <a href="index.html" class="mt-4 inline-block px-6 py-2 bg-red-500 text-white font-medium rounded-full hover:bg-red-600 transition-colors">Go Back Home</a>
                     </div>
                 `;
@@ -78,14 +78,14 @@
                     <img src="${student.imageUrl}" alt="Image of ${student.name}" class="rounded-full w-24 h-24 md:w-32 md:h-32 object-cover border-4 border-white shadow-md">
                     <div class="text-center md:text-left">
                         <h2 class="text-2xl md:text-3xl font-bold text-gray-800">${student.name}</h2>
-                        <p class="text-lg text-gray-600 mt-1">${student.major} Major | ${student.grade}</p>
+                        <p class="text-lg text-gray-600 mt-1">${student.grade} | ឯកទេស ${student.major}</p>
                         <div class="mt-4 text-gray-700 space-y-2">
-                            <p><span class="font-semibold">Student ID:</span> ${student.id}</p>
-                            <p><span class="font-semibold">Email:</span> <a href="mailto:${student.email}" class="text-blue-500 hover:underline">${student.email}</a></p>
-                            <p><span class="font-semibold">Phone:</span> ${student.phone}</p>
-                            <p><span class="font-semibold">Address:</span> ${student.address}</p>
+                            <p><span class="font-semibold">អត្តលេខមន្ត្រី:</span> ${student.id}</p>
+                            <p><span class="font-semibold">អ៊ីមែល:</span> <a href="mailto:${student.email}" class="text-blue-500 hover:underline">${student.email}</a></p>
+                            <p><span class="font-semibold">ទូរស័ព្ទ:</span> ${student.phone}</p>
+                            <p><span class="font-semibold">ថ្ងៃខែឆ្នាំកំណើត:</span> ${student.address}</p>
                         </div>
-                        <a href="index.html" class="mt-6 inline-block px-6 py-2 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition-colors">Go Back to Student List</a>
+                        <!--<a href="index.html" class="mt-6 inline-block px-6 py-2 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition-colors">Go Back to Student List</a>-->
                     </div>
                 </div>
             `;
@@ -116,8 +116,8 @@
         function showStudentList() {
             contentDiv.innerHTML = `
                 <div class="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0">
-                    <h2 class="text-2xl font-bold text-gray-700">All Students (${students.length})</h2>
-                    <input id="searchInput" type="text" placeholder="Search by name or ID..." class="w-full md:w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <h2 class="text-2xl font-bold text-gray-700">បុគ្គលិកទាំងអស់ (${students.length})</h2>
+                    <input id="searchInput" type="text" placeholder="ស្វែងរក​ដោយ​បញ្ចូលឈ្មោះ ឬ អត្តលេខ..." class="w-full md:w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 <div id="student-list" class="space-y-6">
                     <!-- Student list will be rendered here -->
